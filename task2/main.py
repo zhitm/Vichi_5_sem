@@ -40,6 +40,9 @@ def lagrange_interpolation(x, nodes):
     :param nodes: Список точек, где будем искать значения
     :return: Значение функции
     """
+    if abs(nodes[0] - x) < 1E-6:
+        return f(nodes[0])
+
     result = 0
     for j in range(len(nodes)):
         term = f(nodes[j])
