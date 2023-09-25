@@ -84,37 +84,15 @@ def newton_method(x, nodes):
         p += coefs[i] * acc
     return p
 
+
 def main():
-    print('Задача алгебраического интерполирования\n Вариант 5')
-
-    print('Введите число значений в таблице: ')
-    m = int(input()) - 1
-
-    print('Введите значений концов отрезка: ')
-    a = float(input())
-    b = float(input())
-    while a >= b:
-        print('Значение левого конца должно быть меньше правого. Введите корректные данные: ')
-        a = float(input())
-        b = float(input())
-
-    print('Если хотите таблицу со случайными узлами - напишите 1, иначе - 2:')
-    choice = int(input())
-    while choice != 1 and choice != 2:
-        print('Некорректная команда. Введите число 1 или 2: ')
-        choice = int(input())
-
-    nodes = create_table(m, a, b, choice)
-    print('Сформированная таблица значений функции:')
-    print(pandas.DataFrame({'z_j': nodes, 'f(z_j)': [f(node) for node in nodes]}))
-
     print('Введите точку X интерполирования: ')
     x = float(input())
 
-    print(f'Введите степень интерполяционного многочлена, не выше {m}')
-    n = int(input())
+    n = int(input(f'Введите степень интерполяционного многочлена, не выше {m}: '))
     while n > m:
-        print(f'Введено недопустимое значение n. Введите число, меньшее {m}')
+        n = int(input(f'Введено недопустимое значение n. Введите число, меньшее {m}: '))
+
 
     selected_nodes = sorted(nodes, key=lambda z: abs(z - x))[:n + 1]
     print('Набор узлов, ближайших к точке Х:')
@@ -128,5 +106,32 @@ def main():
     print(f'Значение по Ньютону: {newton}')
     print(f'Абсолютная фактическая погрешность для многочлена Ньютона: {abs(newton - f(x))}')
 
+    print('Если хотите выйти из программы, нажмите Enter. Иначе введите 1, чтобы продолжить')
+    str = input()
+    if str == '1':
+        main()
+
+
+print('Задача алгебраического интерполирования\n Вариант 5')
+
+print('Введите число значений в таблице: ')
+m = int(input()) - 1
+
+a = float(input('Введите значений левого конца отрезка: '))
+b = float(input('Введите значений правого конца отрезка: '))
+while a >= b:
+    print('Значение левого конца должно быть меньше правого. Введите корректные данные ')
+    a = float(input('Введите значений левого конца отрезка: '))
+    b = float(input('Введите значений правого конца отрезка: '))
+
+print('Если хотите таблицу со случайными узлами - напишите 1, иначе - 2:')
+choice = int(input())
+while choice != 1 and choice != 2:
+    print('Некорректная команда. Введите число 1 или 2: ')
+    choice = int(input())
+
+nodes = create_table(m, a, b, choice)
+print('Сформированная таблица значений функции:')
+print(pandas.DataFrame({'z_j': nodes, 'f(z_j)': [f(node) for node in nodes]}))
 
 main()
