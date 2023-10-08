@@ -2,9 +2,8 @@ import math
 
 import pandas as pandas
 
-A = 0
+
 e = 10 ** (-8)
-B = 1
 
 
 def f(x):
@@ -31,6 +30,8 @@ def lagrange_interpolation(x, table):
         term = table[1][j]
         for i in range(len(table[0])):
             if i != j:
+                if abs(table[0][j] - table[0][i]) < e:
+                    return None
                 term *= (x - table[0][i]) / (table[0][j] - table[0][i])
         result += term
     return result
@@ -46,7 +47,7 @@ def has_root(a, b):
     return (f(a) > 0 > f(b)) or (f(a) < 0 < f(b)) or f(a) == 0 or f(b) == 0
 
 
-def root_separation(n_parts):
+def root_separation(n_parts, A, B):
     """
     Root separation process
     :param n_parts: the number of parts into which we divide the segment
@@ -117,23 +118,26 @@ def main():
     print('I способ: интерполирование обратной функции')
     selected_nodes = sorted(nodes, key=lambda z: abs(f(z) - F))[:n + 1]
     print('Набор узлов, ближайших к значению F:')
-    print(pandas.DataFrame({'f(z_j)': [f(node) for node in selected_nodes], 'f^-1(f(z_j))': selected_nodes}))
-
     table = [[f(node) for node in selected_nodes], selected_nodes]
+    print(pandas.DataFrame({'f(z_j)': table[0], 'f^-1(f(z_j))': table[1]}))
+
     lagrange = lagrange_interpolation(F, table)
-    print(f'Аргумент функции f, при котором мы получаем значение {F} равен {lagrange}')
-    print(f'Абсолютная фактическая погрешность для формы Лагранжа: {abs(F - f(lagrange))}')
+    if lagrange:
+        print(f'Аргумент функции f, при котором мы получаем значение {F} равен {lagrange}')
+        print(f'Абсолютная фактическая погрешность для формы Лагранжа: {abs(F - f(lagrange))}')
+    else:
+        print('Функция не мотононная, метод Лагранжа не работает!')
 
     print('\nII способ: используем интерполяционный полином')
     table = [nodes, [f(node) for node in nodes]]
-    good_segms = root_separation(n)
+    good_segms = root_separation(n, a, b)
 
     print(f"Количество отрезков, содержащих корни: {len(good_segms)}")
     for segm in good_segms:
         app, X = secant_method(segm, F, table)
-        print(f'Корень: {X}, невязка: {abs(f(X) - F)}')
+        print(f'Отрезок: {segm}, Корень: {X}, невязка: {abs(f(X) - F)}')
 
-    print('Если хотите выйти из программы, введите любой символ. Иначе введите 1, чтобы продолжить')
+    print('Если хотите выйти из программы, введите любой символ кроме 1. Иначе введите 1, чтобы продолжить')
     choice = input()
     if choice == '1':
         main()
