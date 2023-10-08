@@ -91,6 +91,8 @@ def secant_method(segm, F, table):
 def main():
     print('Введите число значений в таблице: ')
     m = int(input()) - 1
+    while m <= 0:
+        m = int(input('Введите число, большее 1! ')) - 1
 
     a = float(input('Введите значений левого конца отрезка: '))
     b = float(input('Введите значений правого конца отрезка: '))
