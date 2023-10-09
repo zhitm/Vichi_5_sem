@@ -22,7 +22,7 @@ def lagrange_interpolation(x, table):
     :param table: Таблица значений функции
     :return: Значение функции в точке x
     """
-    if abs(table[0][0] - x) < 1E-6:
+    if abs(table[0][0] - x) < e:
         return table[1][0]
 
     result = 0
@@ -76,10 +76,10 @@ def secant_method(segm, F, table):
     approaching = [b]
     while abs(lagrange_interpolation(b, table) - F) > e and counter < 50:
         null_cnt = 0
-        while lagrange_interpolation(a, table) == lagrange_interpolation(b, table) and null_cnt < 20:
+        while abs(lagrange_interpolation(a, table) - lagrange_interpolation(b, table)) <= e and null_cnt < 20:
             null_cnt += 1
             a -= e / 40
-        if lagrange_interpolation(a, table) == lagrange_interpolation(b, table):
+        if abs(lagrange_interpolation(a, table) - lagrange_interpolation(b, table)) <= e:
             print("Деление на 0")
             return approaching, None
         b = b - (lagrange_interpolation(b, table) - F) / (lagrange_interpolation(b, table) -
@@ -134,7 +134,10 @@ def main():
     print(f"Количество отрезков, содержащих корни: {len(good_segms)}")
     for segm in good_segms:
         app, X = secant_method(segm, F, table)
-        print(f'Отрезок: {segm}, Корень: {X}, невязка: {abs(f(X) - F)}')
+        if not X:
+            print(f'Отрезок: {segm}, что-то не так')
+        else:
+            print(f'Отрезок: {segm}, Корень: {X}, невязка: {abs(f(X) - F)}')
 
     print('Если хотите выйти из программы, введите любой символ кроме 1. Иначе введите 1, чтобы продолжить')
     choice = input()
