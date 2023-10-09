@@ -13,18 +13,42 @@ def f(x):
 
 
 def real_first_derr(x):
+    """
+    Заданная функция
+    :param x: Переменная
+    :return: Значение первой прозводной функции
+    """
     return f(x) * 1.5
 
 
 def real_second_derr(x):
+    """
+    Заданная функция
+    :param x: Переменная
+    :return: Значение второй прозводной функции
+    """
     return f(x) * 1.5 * 1.5
 
 
 def calc_second_derr(values, i, h):
+    """
+       Заданная функция
+       :param values: Значения в узлах
+       :param i: Индекс узла
+       :param h: Расстояние между соседники узлами
+       :return: Значение второй прозводной функции (численный метод)
+       """
     return (values[i + 1] - 2 * values[i] + values[i - 1]) / (h * h)
 
 
 def calc_first_derr(values, i, h):
+    """
+    Заданная функция
+    :param values: Значения в узлах
+    :param i: Индекс узла
+    :param h: Расстояние между соседники узлами
+    :return: Значение первой прозводной функции (численный метод)
+    """
     if i == 0:
         return (-3 * values[0] + 4 * values[1] - values[2]) / h
     if i == len(values) - 1:
