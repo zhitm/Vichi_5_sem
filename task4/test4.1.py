@@ -53,5 +53,7 @@ class TestSum(unittest.TestCase):
 
     def test_38_tr(self):
         self.assertEqual(task4_1.kf_3_8(cube, a, b), cube_int(a, b))
+
+
 if __name__ == '__main__':
     unittest.main()

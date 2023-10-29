@@ -51,6 +51,7 @@ def main():
     kf38 = kf_3_8(f, a, b)
     integrals = [kflt, kfrt, kfmt, kft, kfs, kf38]
     real_value = int_f(a, b)
+    print(f'Точное значение интеграла: {real_value}')
     abses = [abs(real_value - kflt), abs(real_value - kfrt), abs(real_value - kfmt), abs(real_value - kft),
              abs(real_value - kfs), abs(real_value - kf38)]
     methods = ['КФ левого треугольника', 'КФ правого треугольника', 'КФ среднего треугольника', 'КФ трапеции', 'КФ Симпсона', 'КФ 3/8']
