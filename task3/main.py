@@ -3,7 +3,7 @@ import math
 import pandas as pandas
 
 
-e = 10 ** (-8)
+e = 10 ** (-14)
 
 
 def f(x):

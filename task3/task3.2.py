@@ -50,10 +50,10 @@ def calc_first_derr(values, i, h):
     :return: Значение первой прозводной функции (численный метод)
     """
     if i == 0:
-        return (-3 * values[0] + 4 * values[1] - values[2]) / h
+        return (-3 * values[0] + 4 * values[1] - values[2]) / (2*h)
     if i == len(values) - 1:
-        return (values[i] - 4 * values[i - 1] + values[i - 2]) / (2 * h)
-    return (values[i + 1] - values[i]) / (2 * h)
+        return (3*values[i] - 4 * values[i - 1] + values[i - 2]) / (2 * h)
+    return (values[i + 1] - values[i-1]) / (2 * h)
 
 
 def main():
