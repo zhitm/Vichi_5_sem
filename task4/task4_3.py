@@ -109,7 +109,6 @@ def main():
     theor_abses1 = [(b - a) ** 2 / (2 * m1), (b - a) ** 2 / (2 * m1), 0, 0, 0]
 
     runge_abses = [abs(kflt - kflt1)/3, abs(kfrt - kfrt1)/3, abs(kfmt - kfmt1)/3, abs(kft - kft1)/3, abs(kfs - kfs1)/15]
-
     table1 = pandas.DataFrame(
         {'Вычисленные значения': integrals1, 'Фактическая': abses1, 'Теоретическая': theor_abses1, 'По Рунге': runge_abses})
     table1.index = methods
