@@ -54,7 +54,7 @@ def main():
     print(f'Точное значение интеграла: {real_value}')
     abses = [abs(real_value - kflt), abs(real_value - kfrt), abs(real_value - kfmt), abs(real_value - kft),
              abs(real_value - kfs), abs(real_value - kf38)]
-    methods = ['КФ левого треугольника', 'КФ правого треугольника', 'КФ среднего треугольника', 'КФ трапеции', 'КФ Симпсона', 'КФ 3/8']
+    methods = ['КФ левого прямоугольника', 'КФ правого прямоугольника', 'КФ среднего прямоугольника', 'КФ трапеции', 'КФ Симпсона']
     table = pandas.DataFrame({'Вычисленные значения': integrals, 'Погрешность': abses})
     table.index = methods
     print(table)
