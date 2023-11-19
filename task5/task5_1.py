@@ -22,6 +22,10 @@ def polynom(x, n):
     return res
 
 
+def pol_int(x, n):
+    return polynom(x, n) * p(x)
+
+
 def main():
     a = float(input('Введите нижний предел интегрирования: '))
     b = float(input('Введите верхний предел интегрирования: '))
@@ -66,11 +70,18 @@ def main():
     print(f"Вычисленное значение интеграка по ИКФ с {n} узлами равна {res}")
     print(f"Погрешность равна {abs(math_res[0] - res)}")
 
-    print("Проверка ИКФ на точность:")
-    
+    print(f"Проверка ИКФ на точность: подставим полином степени {n}")
 
+    def func(x):
+        return pol_int(x, n)
+    math_res_pol = scipy.integrate.quad(func, a, b)
+    print('"Точное" значение интеграла: ', f'{math_res_pol[0]} с точностью {math_res_pol[1]}')
 
-
+    res_pol = 0
+    for i in range(n):
+        res_pol += X[i] * polynom(nodes[i], n)
+    print(f"Вычисленное значение интеграка по ИКФ с {n} узлами равна {res_pol}")
+    print(f"Погрешность равна {abs(math_res_pol[0] - res_pol)}")
 
 print(
     '"Приближённое вычисление интегралов при помощи квадратурных формул\nНаивысшей Алгебраической Степени Точности '
