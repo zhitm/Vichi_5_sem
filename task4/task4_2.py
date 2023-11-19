@@ -1,16 +1,26 @@
 import pandas as pandas
-
-
-def int_f(a, b):
-    return (b * b - a * a) / 2
+import math
 
 
 def p(x):
     return 1
 
 
+# def f(x):
+#  return x
+#
+#
+# def int_f(a, b):
+#  return (b * b - a * a) / 2
+
+
+
+def int_f(a, b):
+    return (b*b-a*a)/2-math.cos(b)+math.cos(a)
+
+
 def f(x):
-    return x
+    return x+math.sin(x)
 
 
 def foo(x):

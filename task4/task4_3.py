@@ -1,16 +1,26 @@
 import pandas as pandas
-
-
-def int_f(a, b):
-    return (b * b - a * a) / 2
-
+import math
 
 def p(x):
     return 1
 
 
+#
+# def f(x):
+#     return x
+#
+#
+# def int_f(a, b):
+#     return (b * b - a * a) / 2
+#
+
+
+def int_f(a, b):
+    return (b*b-a*a)/2-math.cos(b)+math.cos(a)
+
+
 def f(x):
-    return x
+    return x+math.sin(x)
 
 
 def foo(x):
@@ -102,22 +112,29 @@ def main():
     kft1 = s_kf_trapezoid(foo, a, b, m1)
     kfs1 = s_kf_simpson(foo, a, b, m1)
     integrals1 = [kflt1, kfrt1, kfmt1, kft1, kfs1]
+
     print(f'Точное значение интеграла: {real_value}')
 
     abses1 = [abs(real_value - kflt1), abs(real_value - kfrt1), abs(real_value - kfmt1), abs(real_value - kft1),
               abs(real_value - kfs1)]
     theor_abses1 = [(b - a) ** 2 / (2 * m1), (b - a) ** 2 / (2 * m1), 0, 0, 0]
 
-    runge_abses = [abs(kflt - kflt1)/3, abs(kfrt - kfrt1)/3, abs(kfmt - kfmt1)/3, abs(kft - kft1)/3, abs(kfs - kfs1)/15]
+    d_p = 1
+    d_2 = 2
+    d_s = 4
+    runge_abses = [(kflt1 - kflt)/(l**d_p-1), (kfrt1 - kfrt)/(l**d_p-1), (kfmt1 - kfmt)/(l**d_2-1), (kft1 - kft)/(l**d_2-1), (kfs1 - kfs)/(l**d_s-1)]
+    integrals2 = [kflt1+runge_abses[0], kfrt1+runge_abses[1], kfmt1+runge_abses[2], kft1+runge_abses[3], kfs1+runge_abses[4]]
+    abses2 = [abs(real_value - integrals2[0]), abs(real_value - integrals2[1]), abs(real_value - integrals2[2]), abs(real_value - integrals2[3]),
+              abs(real_value - integrals2[4])]
     table1 = pandas.DataFrame(
-        {'Вычисленные значения': integrals1, 'Фактическая': abses1, 'Теоретическая': theor_abses1, 'По Рунге': runge_abses})
+        {'Вычисленные значения': integrals1, 'Фактическая': abses1, 'Теоретическая': theor_abses1, 'По Рунге': integrals2, 'Фактическая Рунге': abses2})
     table1.index = methods
     pandas.set_option('display.max_columns', 500)
     print("Таблица с более мелким делением: ")
     print(table1)
 
 
-print(
+    print(
     'Приближенное вычисление интеграла по составным квадратурным формулам\nВариант 5\nВыполнили Житнухина Мария и Карасева Елизавета')
 
-main()
+# main()

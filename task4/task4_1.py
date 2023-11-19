@@ -1,12 +1,13 @@
 import pandas as pandas
+import math
 
 
 def int_f(a, b):
-    return (b*b-a*a)/2
+    return (b*b-a*a)/2-math.cos(b)+math.cos(a)
 
 
 def f(x):
-    return x
+    return x+math.sin(x)
 
 
 def kf_left_triangle(f, a, b):
@@ -35,13 +36,13 @@ def kf_3_8(f, a, b):
 
 
 def main():
-    a = float(input('Введите значений левого конца отрезка: '))
-    b = float(input('Введите значений правого конца отрезка: '))
+    a = float(input('Введите значение левого конца отрезка: '))
+    b = float(input('Введите значение правого конца отрезка: '))
 
     while a >= b:
         print('Значение левого конца должно быть меньше правого. Введите корректные данные ')
-        a = float(input('Введите значений левого конца отрезка: '))
-        b = float(input('Введите значений правого конца отрезка: '))
+        a = float(input('Введите значение левого конца отрезка: '))
+        b = float(input('Введите значение правого конца отрезка: '))
 
     kflt = kf_left_triangle(f, a, b)
     kfrt = kf_right_triangle(f, a, b)
@@ -54,11 +55,11 @@ def main():
     print(f'Точное значение интеграла: {real_value}')
     abses = [abs(real_value - kflt), abs(real_value - kfrt), abs(real_value - kfmt), abs(real_value - kft),
              abs(real_value - kfs), abs(real_value - kf38)]
-    methods = ['КФ левого прямоугольника', 'КФ правого прямоугольника', 'КФ среднего прямоугольника', 'КФ трапеции', 'КФ Симпсона']
+    methods = ['КФ левого прямоугольника', 'КФ правого прямоугольника', 'КФ среднего прямоугольника', 'КФ трапеции', 'КФ Симпсона', 'КФ 3_8']
     table = pandas.DataFrame({'Вычисленные значения': integrals, 'Погрешность': abses})
     table.index = methods
     print(table)
 
 print('Приближенное вычисление интеграла по приближенным формулам\nВариант 5\nВыполнили Житнухина Мария и Карасева Елизавета')
 
-main()
+# main()

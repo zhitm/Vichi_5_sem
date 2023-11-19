@@ -38,7 +38,7 @@ m = 200
 class TestSum(unittest.TestCase):
 
     def test_left_tr(self):
-        self.assertTrue(task4_2.s_kf_left_triangle(const, a, b, m - 10 * (b - a) < 1e-8)
+        self.assertTrue(task4_2.s_kf_left_triangle(const, a, b, m) - 10 * (b - a) < 1e-8)
 
     def test_right_tr(self):
         self.assertTrue(task4_2.s_kf_right_triangle(const, a, b, m) - 10 * (b - a) < 1e-8)
