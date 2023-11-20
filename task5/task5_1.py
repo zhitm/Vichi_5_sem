@@ -27,11 +27,11 @@ def pol_int(x, n):
 
 def get_moment(k, a, b):
     def moment_func(x):
-        return pol_int(x, k)
+        return x**k*p(x)
     #число делений отрезка
-    m = 2500
-    return task4_3.s_kf_simpson(moment_func, a, b, m)
-
+    # m = 2500
+    # return task4_3.s_kf_simpson(moment_func, a, b, m)
+    return scipy.integrate.quad(moment_func, a, b)[0]
 
 def get_ortogonal_koefs(n, a, b):
     moments = []
@@ -55,7 +55,9 @@ def get_ortogonal_koefs(n, a, b):
 
 
 def get_roots(n, a, b):
-    koefs = numpy.array([1])+get_ortogonal_koefs(n, a, b)
+    koefs = numpy.array([1])+numpy.flip(get_ortogonal_koefs(n, a, b))
+    # koefs = numpy.array([1])+(get_ortogonal_koefs(n, a, b))
+
     roots = numpy.roots(koefs)
     real_valued = roots.real[abs(roots.imag)<1e-5]
     print("Найденные корни:")
