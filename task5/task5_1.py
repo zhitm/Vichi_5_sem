@@ -3,8 +3,9 @@ import scipy
 import numpy
 from task4 import task4_3
 
-
 def p(x):
+    if x == 0:
+        return 0
     return -1 * math.log(x, math.e)
 
 
@@ -19,7 +20,7 @@ def foo(x):
 def polynom(x, n):
     res = 0
     for i in range(n):
-        res += x ** i
+        res += x**i
     return res
 
 
@@ -29,44 +30,54 @@ def pol_int(x, n):
 
 def get_moment(k, a, b):
     def moment_func(x):
-        return x ** k * p(x)
-
-    # число делений отрезка
+        return x**k*p(x)
+    #число делений отрезка
     # m = 2500
     # return task4_3.s_kf_simpson(moment_func, a, b, m)
     return scipy.integrate.quad(moment_func, a, b)[0]
 
-
 def get_ortogonal_koefs(n, a, b):
     moments = []
-    for i in range(2 * n - 1):
+    for i in range(2*n):
         moments.append(get_moment(i, a, b))
 
     print("Моменты:")
     print(moments)
     table = []
     for i in range(n):
-        row = moments[i:i + n]
+        row = moments[i:i+n]
         table.append(row)
     A = numpy.array(table)
-    B = numpy.array(moments[n - 1:2 * n])
+    B = numpy.array(moments[n:2*n+1])
 
     koefs = numpy.linalg.solve(A, (-1) * B)
     print("Ортогональные коэффициенты:")
     print(koefs)
-    return koefs
+    return numpy.linalg.solve(A, (-1)*B)
 
 
 def get_roots(n, a, b):
-    koefs = numpy.append(numpy.array([1]), numpy.flip(get_ortogonal_koefs(n, a, b)))
+<<<<<<< HEAD
+    koefs = numpy.insert(numpy.flip(get_ortogonal_koefs(n, a, b)), 0, 1)
+    print('get = ', get_ortogonal_koefs(n, a, b), "koefs = ", koefs)
+    roots = numpy.flip(numpy.roots(koefs))
+=======
+    koefs = numpy.array([1])+numpy.flip(get_ortogonal_koefs(n, a, b))
     # koefs = numpy.array([1])+(get_ortogonal_koefs(n, a, b))
 
     roots = numpy.roots(koefs)
+>>>>>>> origin/master
+    real_valued = roots.real[abs(roots.imag)<1e-5]
+    print("Найденные корни:")
     print(roots)
-    # real_valued = roots.real[abs(roots.imag) < 1e-10]
-    # print("Найденные корни:")
-    # print(real_valued)
     return roots
+
+
+def calculate_value(func, coefs, nodes):
+    result = 0
+    for i in range(len(nodes)):
+        result += coefs[i] * func(nodes[i])
+    return result
 
 
 def get_ikf(a, b, nodes):
@@ -98,9 +109,6 @@ def get_ikf(a, b, nodes):
     for i in range(n):
         res += X[i] * f(nodes[i])
 
-    res_pol = 0
-    for i in range(n):
-        res_pol += X[i] * polynom(nodes[i], n)
     return X, res
 
 
@@ -130,9 +138,9 @@ def main():
 
     def func(x):
         return pol_int(x, n)
-
     math_res_pol = scipy.integrate.quad(func, a, b)
     print('"Точное" значение интеграла: ', f'{math_res_pol[0]} с точностью {math_res_pol[1]}')
+
 
     # res_pol = get_ikf(a, b, nodes)
     res_pol = 0
@@ -143,16 +151,18 @@ def main():
     print(f"Погрешность равна {abs(math_res_pol[0] - res_pol)}")
 
     kfnast_nodes = get_roots(n, a, b)
+    print(f"nodes: {kfnast_nodes}")
     x, res_kfnast = get_ikf(a, b, kfnast_nodes)
     res = 0
-    for i in range(len(x)):
-        res += x[i]*(kfnast_nodes[i]**(2*n-1))
 
     def fun(x):
         return x**(2*n-1)
-    math_res_pol = scipy.integrate.quad(fun, a, b)
+    res = calculate_value(fun, x, kfnast_nodes)
+    math_res = scipy.integrate.quad(fun, a, b)
     print(f"Вычисленное значение интеграла по КФНАСТ с {len(kfnast_nodes)} узлами равна {res}")
-    print(f"Погрешность равна {abs(math_res_pol[0] - res)}")
+    print(f"Точное значение: {math_res[0]}")
+    print(f"Погрешность равна {abs(math_res[0] - res)}")
+
 
 
 print(
