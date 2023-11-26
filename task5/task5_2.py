@@ -35,11 +35,12 @@ for N in range(1, 8):
     roots = get_lezandr_roots(N)
     print(roots)
     C = [get_cK(N, i, roots) for i in range(0, N)]
+    print(C)
     print(sum(C))
     integral = 0
     l = (B-A)/2
     for i in range(len(C)):
-        integral += l * C[i]*f(l*roots[i] + l + A)
+         integral += l * C[i]*f(l*roots[i] + l + A)
     print(integral)
     math_res = scipy.integrate.quad(f, A, B)
-    print(f'Невязка: {abs(math_res[0])}')
+    print(f'Невязка: {abs(integral-math_res[0])}')
