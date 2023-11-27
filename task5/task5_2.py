@@ -46,12 +46,14 @@ def check_polynom(n, roots, c):
 
     print(f"Проверка ИКФ на точность: подставим полином степени {2*n - 1}")
     res_pol = 0
-    for i in range(n):
+    for i in\
+            range(n):
         res_pol += c[i] * polynom(roots[i], n)
     print(f"Вычисленное значение интеграла по ИКФ с {2*n-1} узлами равна {res_pol}")
-    math_res_pol = scipy.integrate.quad(func, a, b)
+    math_res_pol = scipy.integrate.quad(func, -1, 1)
     print('"Точное" значение интеграла: ', f'{math_res_pol[0]} с точностью {math_res_pol[1]}')
     print(f"Погрешность равна {abs(math_res_pol[0] - res_pol)}")
+
 
 def nodes_koefs(n):
     print(f"\nКоличество узлов N = {n}")
@@ -59,7 +61,7 @@ def nodes_koefs(n):
     print("           Узлы               Коэффициенты КФ Гаусса")
     C = [get_cK(n, i, roots) for i in range(0, n)]
     for i in range(n):
-        print(f"x_i = {roots[i]}\t a_i = {C[i]}")
+        print(f"x_{i} = {roots[i]}\t a_{i} = {C[i]}")
     print(f"Проверка: сумма коэффициентов = {sum(C)}")
     return roots, C
 
