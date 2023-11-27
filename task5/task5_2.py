@@ -1,11 +1,13 @@
 import math
 import task1.main
 import scipy
-A = 0
-B = 1
+a = 0
+b = 1
+
 
 def f(x):
     return math.log(1+x, math.e)/(1+x**2)
+
 
 def lezandr(x, n):
     if n == 0:
@@ -30,17 +32,72 @@ def get_lezandr_roots(n):
 def get_cK(n, k, roots):
     return 2*(1-roots[k]**2)/n**2/(lezandr(roots[k], n-1)**2)
 
-for N in range(1, 8):
-    print(f"{N}--------------------")
-    roots = get_lezandr_roots(N)
-    print(roots)
-    C = [get_cK(N, i, roots) for i in range(0, N)]
-    print(C)
-    print(sum(C))
+
+def polynom(x, n):
+    res = 0
+    for i in range(2*n - 1):
+        res += x ** i
+    return res
+
+
+def check_polynom(n, roots, c):
+    def func(x):
+        return polynom(x, n)
+
+    print(f"Проверка ИКФ на точность: подставим полином степени {2*n - 1}")
+    res_pol = 0
+    for i in range(n):
+        res_pol += c[i] * polynom(roots[i], n)
+    print(f"Вычисленное значение интеграла по ИКФ с {2*n-1} узлами равна {res_pol}")
+    math_res_pol = scipy.integrate.quad(func, a, b)
+    print('"Точное" значение интеграла: ', f'{math_res_pol[0]} с точностью {math_res_pol[1]}')
+    print(f"Погрешность равна {abs(math_res_pol[0] - res_pol)}")
+
+def nodes_koefs(n):
+    print(f"\nКоличество узлов N = {n}")
+    roots = get_lezandr_roots(n)
+    print("           Узлы               Коэффициенты КФ Гаусса")
+    C = [get_cK(n, i, roots) for i in range(0, n)]
+    for i in range(n):
+        print(f"x_i = {roots[i]}\t a_i = {C[i]}")
+    print(f"Проверка: сумма коэффициентов = {sum(C)}")
+    return roots, C
+
+
+def integrate_kf(n):
+    roots, C = nodes_koefs(n)
     integral = 0
-    l = (B-A)/2
+    l = (b - a) / 2
     for i in range(len(C)):
-         integral += l * C[i]*f(l*roots[i] + l + A)
-    print(integral)
-    math_res = scipy.integrate.quad(f, A, B)
-    print(f'Невязка: {abs(integral-math_res[0])}')
+        integral += l * C[i] * f(l * roots[i] + l + a)
+    print(f"Вычисленное значение интеграла с {n} узлами = {integral}")
+    math_res = scipy.integrate.quad(f, a, b)
+    print(f"Точное значение интеграла с {n} узлами = {math_res[0]}")
+    print(f'Невязка: {abs(integral - math_res[0])}')
+
+
+def main():
+    for N in range(1, 8):
+        roots, c = nodes_koefs(N)
+        if N == 3 or N == 4 or N == 5:
+            check_polynom(N, roots, c)
+
+    s = input("Введите число узлов для вычисления интеграла. Чтобы выйти, введите 'quit'\n> ")
+    while s != 'quit':
+        nodes = int(s)
+        integrate_kf(nodes)
+        s = input("Введите число узлов для вычисления интеграла. Чтобы выйти, введите 'quit'\n> ")
+
+
+
+print("КФ Гаусса, ее узлы и коэффициенты\nВычисление интегралов при помощи КФ Гаусса\nВариант 5\nВыполнили "
+      "Житнухина Мария и Карасева Елизавета")
+a = int(input("Введите границы отрезка\nа = "))
+b = int(input("b = "))
+
+while a >= b:
+    print("Левая граница должна быть меньше правой. Введите корректные данные.")
+    a = int(input("а = "))
+    b = int(input("b = "))
+
+main()
